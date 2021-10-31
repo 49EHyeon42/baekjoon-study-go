@@ -19,16 +19,16 @@ func main() {
 }
 
 func solution(N int) int {
-	if N > 100 {
-		var count int = 99
-		for i := 100; i <= N; i++ {
+	var count int
+	for i := 1; i <= N; i++ {
+		if i < 100 {
+			count += 1
+		} else {
 			hun, ten, one := i/100, (i/10)%10, i%10
 			if hun-ten == ten-one {
 				count += 1
 			}
 		}
-		return count
-	} else {
-		return N
 	}
+	return count
 }
