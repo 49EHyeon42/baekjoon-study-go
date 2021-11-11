@@ -16,9 +16,6 @@ func main() {
 	fmt.Fscanln(reader, &N, &M)
 
 	array := make([]int, N)
-	for i := 1; i <= N; i++ {
-		array[i-1] = i
-	}
 
 	Rpermutation(array, N, M, 0)
 
