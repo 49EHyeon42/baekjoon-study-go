@@ -1,36 +1,69 @@
 package main
 
 type node struct {
-	value, priority int
+	priority, value int
 }
 
-func newNode(value, priority int) *node {
-	return &node{value: value, priority: priority}
+func NewPriorityQueue() heap {
+	return heap{}
 }
 
-type heap []int
+type heap []node
 
-func NewPriorityQueue() *heap {
-	return &heap{}
+func (h heap) IsEmpty() bool {
+	return h.Len() == 0
 }
 
 func (h heap) Len() int {
 	return len(h)
 }
-func (h heap) IsEmpty() bool {
-	return h.Len() == 0
+
+func (h *heap) Enqueue(priority, value int) {
+	newNode := node{priority: priority, value: value}
+	*h = append(*h, newNode)
+	h.heapSort()
 }
 
-func (h *heap) peek() {
+func (h *heap) Dequeue() node {
+	if h.IsEmpty() {
+		return node{-1, -1}
+	}
+	answer := (*h)[0]
+	*h = (*h)[1:]
+	return answer
+}
+
+func (h heap) Peek() node {
+	if h.IsEmpty() {
+		return node{-1, -1}
+	}
+	return h[0]
+}
+
+func (h *heap) heapSort() {
+	for i := h.Len()/2 - 1; i >= 0; i-- {
+		h.heapify(i, h.Len())
+	}
+	for i := h.Len() - 1; i >= 0; i-- {
+		(*h)[0], (*h)[i] = (*h)[i], (*h)[0]
+		h.heapify(0, i)
+	}
+}
+
+func (h *heap) heapify(idx, heapSize int) {
+	largest, leftIdx, rightIdx := idx, idx*2+1, idx*2+2
+	if leftIdx < heapSize && (*h)[leftIdx].priority > (*h)[largest].priority {
+		largest = leftIdx
+	}
+	if rightIdx < heapSize && (*h)[rightIdx].priority > (*h)[largest].priority {
+		largest = rightIdx
+	}
+	if largest != idx {
+		(*h)[idx], (*h)[largest] = (*h)[largest], (*h)[idx]
+		h.heapify(largest, heapSize)
+	}
 }
 
 func main() {
 
 }
-
-/*
-peek : 최대 우선순위 값 반환
-enqueue : 삽입
-dequeue : 최대 우선순위 요소를 삭제하고 그 값을 반환
-heapify : 힙 속성을 유지하는 작업
-*/
